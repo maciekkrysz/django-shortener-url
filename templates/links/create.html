@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if not created %}
+
+    <div style='margin-top:30px;'>
+        <form action='.' method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button style='margin-top:10px;' type='submit' >Create link</button>
+        </form>
+    </div>
+    {% else %}
+
+    <p>Your link was created. <a href=http://{{ request.get_host }}>Create new short link!</a></p>
+    {{ object.link_to }} was shortened to <a href=http://{{ request.get_host }}/{{ object.alias }}> {{ request.get_host }}/{{ object.alias }} </a>
+
+    {% endif %}
+
+{% endblock content %}
