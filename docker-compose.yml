@@ -1,0 +1,34 @@
+version: "3.9"
+   
+services:
+  postgres:
+    image: postgres:13.1
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    env_file: 
+      - .env
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
+  server:
+    build: .
+    tty: true
+    restart: always
+    # command: >
+    #   sh -c "python manage.py makemigrations template_accounts &&
+    #          python manage.py migrate &&
+    #          python manage.py runserver 0.0.0.0:${SERVER_PORT}"
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    depends_on:
+      - postgres
