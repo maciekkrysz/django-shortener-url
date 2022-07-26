@@ -1,8 +1,11 @@
 # django-shortener-url
-minimalistic app for creating shorter urls
+minimalistic REST app for creating shorter urls
 
-### form 
-![obraz](https://user-images.githubusercontent.com/63737298/180577649-8b37f481-b5db-4d76-a3fb-6d4534e396ff.png)
+### [POST] Creating alias for URL
+![obraz](https://user-images.githubusercontent.com/63737298/181126739-22f223b3-dfe1-47ae-a2aa-1707e88407cb.png)
 
-### created url
-![obraz](https://user-images.githubusercontent.com/63737298/180577683-6c010b56-a9f3-47fa-8186-0411c462aa0c.png)
+### [GET] details/<str:alias>/ Get details of alias
+![obraz](https://user-images.githubusercontent.com/63737298/181126772-e92a0a7e-6ffa-4960-9462-230a4875fd11.png)
+
+### goto/<str:alias>/ Go to URL from alias
+![obraz](https://user-images.githubusercontent.com/63737298/181127223-a6c3b366-3adb-4d55-9fdc-2f6907b03df1.png)
