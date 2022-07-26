@@ -1,23 +1,34 @@
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
-from shortener_url.forms import LinkForm
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.http import Http404
+from django.shortcuts import redirect
 
 from shortener_url.models import Link
+from shortener_url.serializers import LinkSerializer
 
 # Create your views here.
 
 
+@api_view(['POST'])
 def short(request):
-    form = LinkForm(request.POST)
-    context = {
-        'form': form
-    }
+    if request.method == 'POST':
+        serializer = LinkSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if form.is_valid():
-        link_object = form.save()
-        context['object'] = link_object
-        context['created'] = True
-    return render(request, "links/create.html", context=context)
+
+@api_view(['GET'])
+def short_details(request, alias):
+    if request.method == 'GET':
+        try:
+            link = Link.objects.get(alias=alias)
+        except Link.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = LinkSerializer(link)
+        return Response(serializer.data)
 
 
 def link_to(request, alias):
